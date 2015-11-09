@@ -1,0 +1,29 @@
+{
+  "name": "lamd",
+  "version": "0.1.1",
+  "description": "Local Asynchronous Module Definition library",
+  "main": "source/lamd.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perry-mitchell/lamd.git"
+  },
+  "keywords": [
+    "amd"
+  ],
+  "author": "Perry Mitchell <perry@perrymitchell.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/perry-mitchell/lamd/issues"
+  },
+  "homepage": "https://github.com/perry-mitchell/lamd#readme",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jasmine": "^0.9.2",
+    "load-grunt-tasks": "^3.3.0",
+    "promise-polyfill": "^2.1.0",
+    "setimmediate": "^1.0.4"
+  }
+}
