@@ -1,4 +1,4 @@
-var lib = {};
+var lamd = {};
 (function(lib) {
 
 	"use strict";
@@ -87,7 +87,9 @@ var lib = {};
 	lib.define = define;
 	lib.require = require;
 
-})(lib);
+})(lamd);
 
-var define = lib.define,
-	require = lib.require;
+if (typeof require === "undefined") {
+	var define = lamd.define,
+		require = lamd.require;
+}
