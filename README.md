@@ -3,6 +3,8 @@ Local Asynchronous Module Definition library
 
 [![Build Status](https://travis-ci.org/perry-mitchell/lamd.svg)](https://travis-ci.org/perry-mitchell/lamd)
 
+[![NPM](https://nodei.co/npm/lamd.png)](https://nodei.co/npm/lamd/)
+
 ## About
 
 lamd is an "offline" AMD implementation, designed to provide `require` and `define` methods for a local set of modules. `require` makes no remote calls, and expects everything to be defined by the corresponding `define` method.
