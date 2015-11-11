@@ -93,6 +93,6 @@ if (typeof require === "undefined") {
 	var define = lamd.define,
 		require = lamd.require;
 }
-if (module) {
+if (typeof module !== "undefined") {
 	module.exports = lamd;
 }
