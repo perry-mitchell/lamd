@@ -1,6 +1,6 @@
 {
   "name": "lamd",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Local Asynchronous Module Definition library",
   "main": "source/lamd.js",
   "scripts": {
