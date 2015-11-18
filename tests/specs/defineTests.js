@@ -22,4 +22,9 @@ describe("define", function() {
 		lamd.define("test/3", 40);
 	});
 
+	it("has `amd` property", function() {
+		expect(!!lamd.define.amd).toBe(true);
+		expect(typeof lamd.define.amd).toBe("object");
+	});
+
 });

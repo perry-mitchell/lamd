@@ -87,6 +87,11 @@ var lamd = {};
 	lib.define = define;
 	lib.require = require;
 
+	// AMD standard requires a define.amd property
+	// available in the define object
+	// https://github.com/amdjs/amdjs-api/wiki/AMD
+	lib.define.amd = {};
+
 })(lamd);
 
 if (typeof require === "undefined") {
