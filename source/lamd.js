@@ -26,7 +26,18 @@
 
 	var __modules = {};
 
-	function define() {
+	/**
+	 * Define a module:
+	 * 	eg. define("namespace/my-module", ["some-requirement"], function(RequirementInstance) { ...
+	 * @param {String} moduleName The name of the module
+	 * @param {Array|String} requirements The requirement name, or an array of requirement names
+	 * @param {Function|*} factory A factory function or value for the definition. If it's a function,
+	 *		it is executed and the value is set to the module itself. If it's another type, it is simply
+	 * 		set to the module. 'undefined' values, either by return value of the factory or input to the
+	 *		define method, are considered erroneous and will throw.
+	 * @returns {Promise} A promise that resolves with an array of satisfied dependencies
+	 */
+	function define(/* moduleName[, requirements], factory */) {
 		var argsLen = arguments.length,
 			id,
 			factory = null,
