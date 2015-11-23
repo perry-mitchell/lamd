@@ -1,5 +1,26 @@
-var lamd = {};
-(function(lib) {
+/**
+ * LAMD - Local Asynchronous Module Definition
+ * AMD-style requires and defines for bundled libraries.
+ * @license MIT
+ * @author Perry Mitchell
+ * @module lamd
+ */
+(function(root, factory) {
+
+    "use strict";
+
+    if (typeof module === "object" && module.exports) {
+        module.exports = root.lamd;
+    } else {
+        root.lamd = (factory)();
+    }
+
+    if (typeof define === "undefined" || typeof require === "undefined") {
+        root.define = root.lamd.define;
+        root.require = root.lamd.require;
+    }
+
+})(this, function() {
 
 	"use strict";
 
@@ -84,20 +105,16 @@ var lamd = {};
 			});
 	}
 
-	lib.define = define;
-	lib.require = require;
+    var lib = {
+        define: define,
+        require: require
+    };
 
 	// AMD standard requires a define.amd property
 	// available in the define object
 	// https://github.com/amdjs/amdjs-api/wiki/AMD
 	lib.define.amd = {};
 
-})(lamd);
+    return lib;
 
-if (typeof require === "undefined") {
-	var define = lamd.define,
-		require = lamd.require;
-}
-if (typeof module !== "undefined") {
-	module.exports = lamd;
-}
+});
