@@ -54,7 +54,7 @@ You can define a module by doing the following:
 
 ## Using this library
 
-lamd writes to global if `require` is not defined. lamd also writes `lamd` to global, which contains the two methods:
+lamd writes `lamd` to the global object (or current context), so you can access its methods like so:
 
 	lamd.define 		// Function
 	lamd.require 		// Function
