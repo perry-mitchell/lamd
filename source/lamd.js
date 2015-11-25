@@ -64,6 +64,19 @@
 		});
 	}
 
+	/**
+	 * A module object
+	 * @typedef {Object} LAMDModule
+	 * @property {String} id - The id of the module
+	 * @property {Function|Object|undefined|*} output - The generated output of the module's factory
+	 * @property {Function|*} factory - The factory for the module
+	 * @property {Function[]=} waitList - An array of dependencies (resolution functions)
+	 */
+
+	/**
+	 * Check if a module is ready (defined)
+	 * @param {LAMDModule|String} moduleOrID The module or ID to check
+	 */
 	function moduleReady(moduleOrID) {
 		if (typeof moduleOrID === "string") {
 			moduleOrID = __modules[moduleOrID] || null;
