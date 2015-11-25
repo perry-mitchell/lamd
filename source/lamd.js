@@ -15,11 +15,6 @@
         root.lamd = (factory)();
     }
 
-    if (typeof define === "undefined" || typeof require === "undefined") {
-        root.define = root.lamd.define;
-        root.require = root.lamd.require;
-    }
-
 })(this, function() {
 
 	"use strict";
