@@ -27,4 +27,17 @@ describe("define", function() {
 		expect(typeof lamd.define.amd).toBe("object");
 	});
 
+	it("fails to define the same ID twice", function(done) {
+		lamd.define("test/5", function() {
+			return true;
+		});
+		lamd.require("test/5", function() {
+			var defineFailure = function() {
+				lamd.define("test/5", "abc");
+			};
+			expect(defineFailure).toThrow();
+			(done)();
+		});
+	});
+
 });

@@ -46,8 +46,12 @@
 			throw new Error("Invalid number of arguments");
 		}
 		id = arguments[0];
-		var module = __modules[id] = __modules[id] || { id: id, output: undefined };
+		var module = __modules[id] = __modules[id] || { id: id, def: false, output: undefined };
+		if (module.def !== false) {
+			throw new Error("Module already defined: " + id);
+		}
 		module.factory = factory;
+		module.def = true;
 		return require(requirements, function() {
 			var satisfactions = Array.prototype.slice.call(arguments);
 			if (typeof module.factory === "function") {
@@ -70,6 +74,7 @@
 	 * @property {String} id - The id of the module
 	 * @property {Function|Object|undefined|*} output - The generated output of the module's factory
 	 * @property {Function|*} factory - The factory for the module
+	 * @property {Boolean} def - Whether the module has been defined or not
 	 * @property {Function[]=} waitList - An array of dependencies (resolution functions)
 	 */
 
@@ -95,7 +100,7 @@
 	}
 
 	function waitForModule(moduleID) {
-		var module = __modules[moduleID] = __modules[moduleID] || { id: moduleID, output: undefined };
+		var module = __modules[moduleID] = __modules[moduleID] || { id: moduleID, def: false, output: undefined };
 		return new Promise(function(resolve) {
 			if (moduleReady(moduleID)) {
 				(resolve)(module);
