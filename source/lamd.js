@@ -15,7 +15,7 @@
         root.lamd = (factory)();
     }
 
-})(this, function() {
+})(this || window, function() {
 
 	"use strict";
 
