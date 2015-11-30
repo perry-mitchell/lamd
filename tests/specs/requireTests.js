@@ -18,4 +18,19 @@ describe("require", function() {
 		});
 	});
 
+	it("returns the defined class with no fn parameter", function(done) {
+		// undefined, not defined yet
+		expect(lamd.require("test/require/3")).toBe(undefined);
+		// define the module (async)
+		lamd.define("test/require/3", "three");
+		// undefined, too early
+		expect(lamd.require("test/require/3")).toBe(undefined);
+		setTimeout(function() {
+			// defined now
+			var three = lamd.require("test/require/3");
+			expect(three).toBe("three");
+			(done)();
+		}, 30);
+	});
+
 });

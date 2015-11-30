@@ -37,7 +37,7 @@ You can define a module by doing the following:
 		};
 	});
 
-`define`'s method signature is `define(id, [dependencies,] callback)`, where:
+`define`'s method signature is `define(id[, dependencies], callback)`, where:
 
  * `id` is the ID of the module, which is required
  * `dependencies` is an _optional_ string or array or dependent module IDs
@@ -47,10 +47,16 @@ You can define a module by doing the following:
 
 `require` can be viewed as the same as the `define` method, but without an ID.
 
-`require`'s method signature is `require(dependencies, callback)`, where:
+`require`'s method signature is `require(dependencies[, callback])`, where:
 
  * `dependencies` is a string or array of required module outputs
  * `callback` is a callback function which takes the required dependency outputs as parameters
+
+`require` can return the defined module instance if it's ready: simply require **only 1** module and do not provide a callback:
+
+	var MyModule = require("MyModule");
+
+`require` will return `undefined` if the module is not ready. Remember that `define` works asynchronously.
 
 ## Using this library
 

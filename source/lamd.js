@@ -30,7 +30,6 @@
 	 *		it is executed and the value is set to the module itself. If it's another type, it is simply
 	 * 		set to the module. 'undefined' values, either by return value of the factory or input to the
 	 *		define method, are considered erroneous and will throw.
-	 * @returns {Promise} A promise that resolves with an array of satisfied dependencies
 	 */
 	function define(/* moduleName[, requirements], factory */) {
 		var argsLen = arguments.length,
@@ -52,7 +51,7 @@
 		}
 		module.factory = factory;
 		module.def = true;
-		return require(requirements, function() {
+		require(requirements, function() {
 			var satisfactions = Array.prototype.slice.call(arguments);
 			if (typeof module.factory === "function") {
 				module.output = module.factory.apply(module.factory, satisfactions);
@@ -91,12 +90,25 @@
 
 	function require(requirements, fn) {
 		requirements = (typeof requirements === "string") ? [requirements] : requirements;
-		return waitForModules(requirements)
+		/*return waitForModules(requirements)
 			.then(function(satisfactions) {
 				fn.apply(null, satisfactions.map(function(satisfaction) {
 					return satisfaction.output;
 				}));
-			});
+			});*/
+		// Asynchronously resolve requirements and execute the callback function
+		if (fn) {
+			waitForModules(requirements)
+				.then(function(satisfactions) {
+					fn.apply(null, satisfactions.map(function(satisfaction) {
+						return satisfaction.output;
+					}));
+				});
+		} else if (requirements.length === 1 && moduleReady(requirements[0])) {
+			// only 1 argument, and no callback, so return the class
+			return __modules[requirements[0]].output;
+		}
+		return undefined;
 	}
 
 	function waitForModule(moduleID) {
