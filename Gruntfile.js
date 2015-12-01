@@ -31,6 +31,9 @@ module.exports = function(grunt) {
     // Grunt package init
     require('load-grunt-tasks')(grunt, { pattern: ['grunt-*'] });
 
-    grunt.registerTask("test", ["jasmine:all"]);
+    grunt.registerTask("test", [
+    	"jasmine:normal",
+    	"jasmine:timeout"
+	]);
 
 };
