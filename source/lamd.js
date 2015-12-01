@@ -90,12 +90,6 @@
 
 	function require(requirements, fn) {
 		requirements = (typeof requirements === "string") ? [requirements] : requirements;
-		/*return waitForModules(requirements)
-			.then(function(satisfactions) {
-				fn.apply(null, satisfactions.map(function(satisfaction) {
-					return satisfaction.output;
-				}));
-			});*/
 		// Asynchronously resolve requirements and execute the callback function
 		if (fn) {
 			waitForModules(requirements)

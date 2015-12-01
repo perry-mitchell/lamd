@@ -4,14 +4,25 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		jasmine: {
-			all: {
+			normal: {
 				src: [
 					"node_modules/setimmediate/setimmediate.js",
 					"node_modules/promise-polyfill/Promise.js",
 					"source/lamd.js"
 				],
 				options: {
-					specs: "tests/specs/**/*.js"
+					specs: "tests/normal/**/*.js"
+				}
+			},
+			timeout: {
+				src: [
+					"node_modules/setimmediate/setimmediate.js",
+					"node_modules/promise-polyfill/Promise.js",
+					"source/lamd.js",
+					"source/lamd+timeout.js"
+				],
+				options: {
+					specs: "tests/timeout/**/*.js"
 				}
 			}
 		}
