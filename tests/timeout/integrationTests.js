@@ -21,7 +21,7 @@ describe("lamd + timeout", function() {
 		lamd.setDefineTimeout(100);
 		lamd.require("not-here", function() {});
 		setTimeout(function() {
-			expect(ErrorMock.lastError.indexOf("timeout occurred")).toBeGreaterThan(-1);
+			expect(ErrorMock.lastError.indexOf("Requirements did not fulfill")).toBeGreaterThan(-1);
 			(done)();
 		}, 130);
 	});
@@ -30,7 +30,7 @@ describe("lamd + timeout", function() {
 		lamd.setDefineTimeout(100);
 		lamd.define("test-name", "not-here", function() {});
 		setTimeout(function() {
-			expect(ErrorMock.lastError.indexOf("timeout occurred")).toBeGreaterThan(-1);
+			expect(ErrorMock.lastError.indexOf("Requirements did not fulfill")).toBeGreaterThan(-1);
 			(done)();
 		}, 130);
 	});

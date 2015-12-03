@@ -9,14 +9,26 @@
 	var __timeout = 500, // timeout in ms
 		NOOP = function() {};
 
-	function waitForRequirementAndTimeout(requirement) {
-		var hasDefined = false;
-		__require(requirement, function(r) {
-			hasDefined = true;
+	function waitForRequirementsAndTimeout(requirements, forModule) {
+		forModule = forModule || "(empty)";
+		var requirementStates = {};
+		requirements.forEach(function(req) {
+			requirementStates[req] = false;
+		});
+		requirements.forEach(function(requirement) {
+			__require(requirement, function() {
+				requirementStates[requirement] = true;
+			});
 		});
 		setTimeout(function() {
-			if (!hasDefined) {
-				throw new Error("A timeout occurred while waiting for a requirement to be defined: " + requirement);
+			var failedRequirements = [];
+			for (var requirement in requirementStates) {
+				if (requirementStates.hasOwnProperty(requirement) && !requirementStates[requirement]) {
+					failedRequirements.push(requirement);
+				}
+			}
+			if (failedRequirements.length > 0) {
+				throw new Error("Requirements did not fulfill for '" + forModule + "': " + failedRequirements.join(", "));
 			}
 		}, __timeout);
 	}
@@ -32,7 +44,7 @@
 			if (typeof requirements === "string") {
 				requirements = [requirements];
 			}
-			requirements.forEach(waitForRequirementAndTimeout);
+			waitForRequirementsAndTimeout(requirements, arguments[0]);
 		}
 		__define.apply(undefined, arguments);
 	};
@@ -42,7 +54,7 @@
 		if (typeof requirements === "string") {
 			requirements = [requirements];
 		}
-		requirements.forEach(waitForRequirementAndTimeout);
+		waitForRequirementsAndTimeout(requirements);
 		return __require.apply(undefined, arguments);
 	}
 
