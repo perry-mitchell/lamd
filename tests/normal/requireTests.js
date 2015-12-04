@@ -18,19 +18,20 @@ describe("require", function() {
 		});
 	});
 
-	it("returns the defined class with no fn parameter", function(done) {
-		// undefined, not defined yet
+	it("returns the module if already defined", function(done) {
 		expect(lamd.require("test/require/3")).toBe(undefined);
-		// define the module (async)
-		lamd.define("test/require/3", "three");
-		// undefined, too early
-		expect(lamd.require("test/require/3")).toBe(undefined);
+		lamd.define("test/require/3", 10);
 		setTimeout(function() {
-			// defined now
-			var three = lamd.require("test/require/3");
-			expect(three).toBe("three");
+			expect(lamd.require("test/require/3")).toBe(10);
 			(done)();
 		}, 30);
+	});
+
+	it("executes the callback with no requirements", function(done) {
+		lamd.require([], function() {
+			expect(arguments.length).toBe(0);
+			(done)();
+		});
 	});
 
 });

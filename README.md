@@ -9,7 +9,7 @@ Local Asynchronous Module Definition library
 
 lamd is an "offline" AMD implementation, designed to provide `require` and `define` methods for a local set of modules. `require` makes no remote calls, and expects everything to be defined by the corresponding `define` method.
 
-lamd uses Promises under the hood, along with setImmediate, to execute dependencies and callbacks with decent performance. Using Promises allows lamd to be restful, and no timers or intervals are used.
+lamd uses simple wrapper functions, along with setImmediate, to execute dependency factories and callbacks with decent performance (it used to use Promises). No timers or intervals are used, unless setImmediate is not available (make sure to polyfill for best performance!).
 
 ### Why?
 
@@ -64,4 +64,6 @@ lamd writes `lamd` to the global object (or current context), so you can access 
 
 	lamd.define 		// Function
 	lamd.require 		// Function
+	lamd.setImmediate   // Function
 
+lamd's `setImmediate` may resolve to `setTimeout(fn, 0)` if a setImmediate polyfill is not available. I recommend using [this one by YuzuJS](https://github.com/YuzuJS/setImmediate).
