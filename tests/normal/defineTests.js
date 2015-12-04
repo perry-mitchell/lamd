@@ -17,6 +17,7 @@ describe("define", function() {
 			expect(two).toBe(10);
 			expect(three).toBe(40);
 			(done)();
+			return null;
 		});
 		lamd.define("test/2", function() { return 10; });
 		lamd.define("test/3", 40);

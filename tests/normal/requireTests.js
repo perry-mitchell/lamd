@@ -18,24 +18,20 @@ describe("require", function() {
 		});
 	});
 
-	it("returns a promise (resolve 1 dependency)", function(done) {
-		lamd.define("test/require/3", 3);
-		lamd.require("test/require/3")
-			.then(function(three) {
-				expect(three).toBe(3);
-			})
-			.then(done);
+	it("returns the module if already defined", function(done) {
+		expect(lamd.require("test/require/3")).toBe(undefined);
+		lamd.define("test/require/3", 10);
+		setTimeout(function() {
+			expect(lamd.require("test/require/3")).toBe(10);
+			(done)();
+		}, 30);
 	});
 
-	it("returns a promise (resolve n dependencies)", function(done) {
-		lamd.define("test/require/4", function() { return 4; });
-		lamd.require(["test/require/4", "test/require/5"])
-			.then(function(items) {
-				expect(items[0]).toBe(4);
-				expect(items[1]).toBe(5);
-			})
-			.then(done);
-		lamd.define("test/require/5", function() { return 5; });
+	it("executes the callback with no requirements", function(done) {
+		lamd.require([], function() {
+			expect(arguments.length).toBe(0);
+			(done)();
+		});
 	});
 
 });

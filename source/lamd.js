@@ -19,7 +19,17 @@
 
 	"use strict";
 
-	var __modules = {};
+	var __modules = {},
+		__setImmediateFn,
+		NOOP = function() {};
+
+	if (typeof setImmediate === "function") {
+		__setImmediateFn = setImmediate;
+	} else {
+		__setImmediateFn = function(fn) {
+			setTimeout(fn, 0);
+		};
+	}
 
 	/**
 	 * Define a module:
@@ -59,6 +69,7 @@
 				module.output = module.factory;
 			}
 			if (module.output === undefined) {
+				console.log("def", id, module.factory, module.output);
 				throw new Error("Module factory output cannot be undefined");
 			}
 			(module.waitList || []).forEach(function(resolutionFn) {
@@ -90,8 +101,26 @@
 
 	function require(requirements, fn) {
 		requirements = (typeof requirements === "string") ? [requirements] : requirements;
+		fn = fn || NOOP;
+		var requirementsCount = requirements.length;
+		if (requirementsCount <= 0) {
+			__setImmediateFn(fn);
+		} else if (requirementsCount === 1 && moduleReady(requirements[0])) {
+			__setImmediateFn(function() {
+				(fn)(__modules[requirements[0]].output);
+			});
+			return __modules[requirements[0]].output;
+		} else {
+			waitForModules(requirements, function(satisfactions) {
+				var moduleOutputs = satisfactions.map(function(satisfaction) {
+					return satisfaction.output;
+				});
+				fn.apply(null, moduleOutputs);
+			});
+		}
+		return undefined;
 		// Asynchronously resolve requirements and execute the callback function
-		return new Promise(function(resolve) {
+		/*return new Promise(function(resolve) {
 			waitForModules(requirements)
 				.then(function(satisfactions) {
 					var moduleOutputs = satisfactions.map(function(satisfaction) {
@@ -102,12 +131,19 @@
 					}
 					(resolve)(moduleOutputs.length === 1 ? moduleOutputs[0] : moduleOutputs);
 				});
-		});
+		});*/
 	}
 
-	function waitForModule(moduleID) {
+	function waitForModule(moduleID, cb) {
 		var module = __modules[moduleID] = __modules[moduleID] || { id: moduleID, def: false, output: undefined };
-		return new Promise(function(resolve) {
+		if (moduleReady(moduleID)) {
+			(resolve)(module);
+		} else {
+			(module.waitList = module.waitList || []).push(function() {
+				(cb)(module);
+			});
+		}
+		/*return new Promise(function(resolve) {
 			if (moduleReady(moduleID)) {
 				(resolve)(module);
 			} else {
@@ -115,12 +151,13 @@
 					(resolve)(module);
 				});
 			}
-		});
+		});*/
 	}
 
-	function waitForModules(moduleIDs) {
-		var satisfactions = [];
-		return Promise
+	function waitForModules(moduleIDs, cb) {
+		var satisfactions = [],
+			modulesLeft = moduleIDs.length;
+		/*return Promise
 			.all(
 				moduleIDs
 					.map(function(moduleID) {
@@ -132,12 +169,22 @@
 			)
 			.then(function() {
 				return satisfactions;
+			});*/
+		moduleIDs.forEach(function(moduleID) {
+			waitForModule(moduleID, function(module) {
+				satisfactions[moduleIDs.indexOf(module.id)] = module;
+				modulesLeft -= 1;
+				if (modulesLeft <= 0) {
+					(cb)(satisfactions);
+				}
 			});
+		})
 	}
 
     var lib = {
         define: define,
-        require: require
+        require: require,
+        setImmediate: __setImmediateFn
     };
 
 	// AMD standard requires a define.amd property
