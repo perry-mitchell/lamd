@@ -119,19 +119,6 @@
 			});
 		}
 		return undefined;
-		// Asynchronously resolve requirements and execute the callback function
-		/*return new Promise(function(resolve) {
-			waitForModules(requirements)
-				.then(function(satisfactions) {
-					var moduleOutputs = satisfactions.map(function(satisfaction) {
-						return satisfaction.output;
-					});
-					if (typeof fn === "function") {
-						fn.apply(null, moduleOutputs);
-					}
-					(resolve)(moduleOutputs.length === 1 ? moduleOutputs[0] : moduleOutputs);
-				});
-		});*/
 	}
 
 	function waitForModule(moduleID, cb) {
@@ -143,33 +130,11 @@
 				(cb)(module);
 			});
 		}
-		/*return new Promise(function(resolve) {
-			if (moduleReady(moduleID)) {
-				(resolve)(module);
-			} else {
-				(module.waitList = module.waitList || []).push(function() {
-					(resolve)(module);
-				});
-			}
-		});*/
 	}
 
 	function waitForModules(moduleIDs, cb) {
 		var satisfactions = [],
 			modulesLeft = moduleIDs.length;
-		/*return Promise
-			.all(
-				moduleIDs
-					.map(function(moduleID) {
-						return waitForModule(moduleID)
-							.then(function(module) {
-								satisfactions[moduleIDs.indexOf(module.id)] = module;
-							});
-					})
-			)
-			.then(function() {
-				return satisfactions;
-			});*/
 		moduleIDs.forEach(function(moduleID) {
 			waitForModule(moduleID, function(module) {
 				satisfactions[moduleIDs.indexOf(module.id)] = module;
