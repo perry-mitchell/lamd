@@ -91,18 +91,18 @@
 	function require(requirements, fn) {
 		requirements = (typeof requirements === "string") ? [requirements] : requirements;
 		// Asynchronously resolve requirements and execute the callback function
-		if (fn) {
+		return new Promise(function(resolve) {
 			waitForModules(requirements)
 				.then(function(satisfactions) {
-					fn.apply(null, satisfactions.map(function(satisfaction) {
+					var moduleOutputs = satisfactions.map(function(satisfaction) {
 						return satisfaction.output;
-					}));
+					});
+					if (typeof fn === "function") {
+						fn.apply(null, moduleOutputs);
+					}
+					(resolve)(moduleOutputs.length === 1 ? moduleOutputs[0] : moduleOutputs);
 				});
-		} else if (requirements.length === 1 && moduleReady(requirements[0])) {
-			// only 1 argument, and no callback, so return the class
-			return __modules[requirements[0]].output;
-		}
-		return undefined;
+		});
 	}
 
 	function waitForModule(moduleID) {
