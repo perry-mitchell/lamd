@@ -24,6 +24,15 @@ describe("require", function() {
 		setTimeout(function() {
 			expect(lamd.require("test/require/3")).toBe(10);
 			(done)();
+		}, 60);
+	});
+
+	it("waits for multiple modules", function(done) {
+		lamd.define("test/require/4", 10);
+		lamd.define("test/require/5", 15);
+		setTimeout(function() {
+			expect(lamd.require(["test/require/4", "test/require/5"], function() {})).toBe(undefined);
+			(done)();
 		}, 30);
 	});
 

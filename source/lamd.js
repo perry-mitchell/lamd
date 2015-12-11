@@ -69,8 +69,7 @@
 				module.output = module.factory;
 			}
 			if (module.output === undefined) {
-				console.log("def", id, module.factory, module.output);
-				throw new Error("Module factory output cannot be undefined");
+				throw new Error("Module factory output cannot be undefined: " + id);
 			}
 			(module.waitList || []).forEach(function(resolutionFn) {
 				(resolutionFn)();
@@ -124,7 +123,7 @@
 	function waitForModule(moduleID, cb) {
 		var module = __modules[moduleID] = __modules[moduleID] || { id: moduleID, def: false, output: undefined };
 		if (moduleReady(moduleID)) {
-			(resolve)(module);
+			(cb)(module);
 		} else {
 			(module.waitList = module.waitList || []).push(function() {
 				(cb)(module);
