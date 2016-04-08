@@ -48,6 +48,8 @@
 		}
 		__define.apply(undefined, arguments);
 	};
+	
+	lamd.define.amd = __define.amd;
 
 	lamd.require = function() {
 		var requirements = arguments[0];
